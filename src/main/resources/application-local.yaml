@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+domain: localhost:8080
+
+spring:
+  application:
+    name: assignment
+
+  datasource:
+    allra:
+      url: jdbc:mysql://localhost:3306/allra?useSSL=false&serverTimezone=Asia/Seoul
+      username: root
+      password: kje991229
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      hikari:
+        register-mbeans: true
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
