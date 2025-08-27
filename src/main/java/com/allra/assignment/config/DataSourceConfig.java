@@ -22,7 +22,7 @@ import java.util.Map;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         entityManagerFactoryRef = "allraEntityManagerFactory",
-        transactionManagerRef = "transactionManager",
+        transactionManagerRef = "allraTransactionManager",
         basePackages = {
                 "com.allra.assignment.dev.item.repository",
                 "com.allra.assignment.dev.payment.repository",
@@ -31,7 +31,7 @@ import java.util.Map;
 )
 public class DataSourceConfig {
     @Bean(name = "allraDataSource")
-    @ConfigurationProperties(prefix = "allra.datasource")
+    @ConfigurationProperties(prefix = "spring.allra.datasource.hikari")
     public DataSource dataSource() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
