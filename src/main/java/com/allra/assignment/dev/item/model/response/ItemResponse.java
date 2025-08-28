@@ -49,6 +49,12 @@ public class ItemResponse {
     @Schema(description = "리뷰 수")
     private Long numOfRatings;
 
+    @Schema(description = "상품 이미지")
+    private String  itemImage;
+
+    @Schema(description = "상품 이미지 경로")
+    private String  itemImagePath;
+
 
     public ItemResponse(Item item) {
         this.id = item.getItemId();
@@ -63,5 +69,7 @@ public class ItemResponse {
         this.numOfSales = item.getNumOfSales();
         this.reviewAvgRating = item.getReviewAvgRating();
         this.numOfRatings = item.getNumOfRatings();
+        this.itemImage = item.getItemImage();
+        this.itemImagePath = item.getItemImagePath();
     }
 }
