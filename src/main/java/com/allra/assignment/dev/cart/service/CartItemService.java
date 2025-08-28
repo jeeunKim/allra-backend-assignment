@@ -138,4 +138,67 @@ public class CartItemService {
     }
 
 
+    /**
+     * 장바구니 상품 수량 조정
+     * @param isIncrement True == 증가, False == 감소
+     */
+    @Transactional
+    public CartItem modifyQuantity(Long userId, Long itemId, boolean isIncrement) {
+
+        return cartItemRepository.findByUserUserIdAndItemItemId(userId, itemId)
+                .map(cartItem -> {
+                    // 품절 체크
+                    if(cartItem.getItem().getIsSoldOut()) {
+                        throw new CartItemException(CartItemErrorResult.CANNOT_MODIFY_IS_SOLD_OUT);
+                    }
+                    // 수량 증/감
+                    if(isIncrement) {
+                        incrementQuantity(cartItem);
+                    } else {
+                        decrementQuantity(cartItem);
+                    }
+
+                    return cartItem;
+                }).orElseThrow(() -> new CartItemException(CartItemErrorResult.ITEM_NOT_IN_CART));
+
+    }
+
+
+    // 수량 +1
+    private void incrementQuantity(CartItem cartItem) {
+        cartItem.setQuantity(cartItem.getQuantity() + 1);
+        int quantity = cartItem.getQuantity();
+
+        // 재고 체크
+        if(quantity > cartItem.getItem().getStock()) {
+            throw new CartItemException(CartItemErrorResult.CANNOT_MODIFY_NOT_ENOUGH_STOCK);
+        }
+
+        // 수량에 따른 금액 변경 (담았을 시에 가격이 아닌 현재 가격을 기반으로 계산)
+        cartItem.setTotalAmount(cartItem.getItem().getAmount() * quantity);
+        cartItem.setTotalDiscountAmount(cartItem.getItem().getDiscountAmount() * quantity);
+        cartItem.setDiscountRate(cartItem.getItem().getDiscountRate());
+        cartItemRepository.save(cartItem);
+    }
+
+    // 수량 -1
+    private void decrementQuantity(CartItem cartItem) {
+        // 감소하여 수량이 없어지는 경우
+        if(cartItem.getQuantity() - 1 == 0) {
+            cartItemRepository.delete(cartItem);
+        }
+        // 감소만 하는 경우
+        else {
+            cartItem.setQuantity(cartItem.getQuantity() - 1);
+
+            int quantity = cartItem.getQuantity();
+            // 수량에 따른 금액 변경 (담았을 시에 가격이 아닌 현재 가격을 기반으로 계산)
+            cartItem.setTotalAmount(cartItem.getItem().getAmount() * quantity);
+            cartItem.setTotalDiscountAmount(cartItem.getItem().getDiscountAmount() * quantity);
+            cartItem.setDiscountRate(cartItem.getItem().getDiscountRate());
+            cartItemRepository.save(cartItem);
+        }
+    }
+
+
 }

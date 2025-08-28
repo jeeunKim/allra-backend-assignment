@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,7 @@ public class CartItemController {
                             품절 및 재고 상태에 대한 예외처리를 포함합니다.
                              """
     )
+    @CrossOrigin(exposedHeaders = "Location")
     @PostMapping(value = "/api/cart")
     public ResponseEntity<Void> addItemToCart(@Valid @RequestBody CartItemRequest request) {
         CartItem cartItem = cartItemService.addItemToCart(request);
@@ -69,5 +71,26 @@ public class CartItemController {
 
         return ResponseEntity.ok().body(cartItemService.getCartItems(userId));
     }
+
+    /**
+     * 장바구니 수정 API
+     */
+    @Operation(summary = "장바구니 수정 API",
+            description = "장바구니에 담은 상품의 수량 수정"
+    )
+    @CrossOrigin(exposedHeaders = "Location")
+    @PatchMapping(value = "/api/cart/{userId}/{itemId}")
+    public ResponseEntity<Void> modifyQuantity(@PathVariable Long userId,
+                                               @PathVariable Long itemId,
+                                               @RequestBody boolean isIncrement) {
+
+        CartItem cartItem = cartItemService.modifyQuantity(userId, itemId, isIncrement);
+        URI location = linkTo(methodOn(CartItemController.class).getCartItems(cartItem.getUser().getUserId())).toUri();
+
+        return ResponseEntity.status(HttpStatus.OK).header("location", String.valueOf(location)).build();
+    }
+
+
+
 
 }

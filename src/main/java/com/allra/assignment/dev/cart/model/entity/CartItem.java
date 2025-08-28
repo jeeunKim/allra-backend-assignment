@@ -17,6 +17,7 @@ import java.time.Instant;
 @Table(name = "cart_items")
 /**
  * 인덱스
+ *      Unique (User_id, Item_id)
  *      단일 인덱스 User_id
  */
 public class CartItem {
