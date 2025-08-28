@@ -1,11 +1,9 @@
 package com.allra.assignment.dev.item.controller;
 
-import com.allra.assignment.dev.item.model.dto.ItemDto;
+import com.allra.assignment.dev.item.model.response.ItemResponse;
 import com.allra.assignment.dev.item.service.ItemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -45,22 +43,22 @@ public class ItemController {
     @Operation(summary = "상품 목록 조회 API")
     @Cacheable("itemPageCache")
     @GetMapping(value = "/api/items")
-    public ResponseEntity<PagedModel<EntityModel<ItemDto>>> getItems(@RequestParam(required = false) Long categoryId,
-                                                                     @RequestParam(required = false) Long detailCategoryId,
-                                                                     @RequestParam(required = false) String itemName,
-                                                                     @RequestParam(required = false) Long minAmount,
-                                                                     @RequestParam(required = false) Long maxAmount,
-                                                                     Pageable pageable) {
+    public ResponseEntity<PagedModel<EntityModel<ItemResponse>>> getItems(@RequestParam(required = false) Long categoryId,
+                                                                          @RequestParam(required = false) Long detailCategoryId,
+                                                                          @RequestParam(required = false) String itemName,
+                                                                          @RequestParam(required = false) Long minAmount,
+                                                                          @RequestParam(required = false) Long maxAmount,
+                                                                          Pageable pageable) {
 
-        Page<ItemDto> itemPage = itemService.getItems(categoryId, detailCategoryId, itemName, minAmount, maxAmount, pageable);
+        Page<ItemResponse> itemPage = itemService.getItems(categoryId, detailCategoryId, itemName, minAmount, maxAmount, pageable);
 
-        PagedResourcesAssembler<ItemDto> itemPageAssembler =
+        PagedResourcesAssembler<ItemResponse> itemPageAssembler =
                 new PagedResourcesAssembler<>(new HateoasPageableHandlerMethodArgumentResolver(), null);
 
         return ResponseEntity.ok()
                     .body(itemPageAssembler
-                            .toModel(itemPage, itemDto ->
-                                EntityModel.of(itemDto, linkTo(methodOn(ItemController.class).getItem(itemDto.getId())).withSelfRel())
+                            .toModel(itemPage, itemResponse ->
+                                EntityModel.of(itemResponse, linkTo(methodOn(ItemController.class).getItem(itemResponse.getId())).withSelfRel())
                             )
                     );
     }

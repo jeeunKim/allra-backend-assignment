@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
 @Getter
@@ -27,7 +26,7 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id", nullable = false)
-    private Long id;
+    private Long itemId;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
