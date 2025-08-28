@@ -72,6 +72,8 @@ public class CartItemController {
         return ResponseEntity.ok().body(cartItemService.getCartItems(userId));
     }
 
+
+
     /**
      * 장바구니 수정 API
      */
@@ -91,6 +93,19 @@ public class CartItemController {
     }
 
 
+    /**
+     * 장바구니 삭제 API
+     */
+    @Operation(summary = "장바구니 삭제 API")
+    @DeleteMapping(value = "/api/cart/{userId}/{itemId}")
+    public ResponseEntity<Void> deleteCartItem(@PathVariable Long userId,
+                                               @PathVariable Long itemId) {
+
+        cartItemService.deleteCartItem(userId, itemId);
+        URI location = linkTo(methodOn(CartItemController.class).getCartItems(userId)).toUri();
+
+        return ResponseEntity.status(HttpStatus.OK).header("location", String.valueOf(location)).build();
+    }
 
 
 }

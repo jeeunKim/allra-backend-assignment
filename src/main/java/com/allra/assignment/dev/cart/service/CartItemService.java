@@ -201,4 +201,11 @@ public class CartItemService {
     }
 
 
+    /**
+     * 장바구니 삭제 API
+     */
+    @Transactional
+    public void deleteCartItem(Long userId, Long itemId) {
+        cartItemRepository.deleteByUserUserIdAndItemItemId(userId, itemId);
+    }
 }
