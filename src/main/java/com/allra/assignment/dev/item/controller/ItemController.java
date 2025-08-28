@@ -10,6 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.HateoasPageableHandlerMethodArgumentResolver;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
@@ -32,15 +33,22 @@ public class ItemController {
 
     /**
      *
-     * @param categoryId 카테고리명
+     * @param categoryId 상위 카테고리명
+     * @param detailCategoryId 하위 카테고리명
      * @param itemName 상품명
      * @param minAmount 최소 가격
      * @param maxAmount 최대 가격
      * @param pageable 페이징 정보
      * @return 페이징 정보를 포함한 상품 목록
-     * @Cachable 같은 파라미터 호출을 캐싱
+     * @Cachable 같은 파라미터 호출을 캐싱, 상품상태 변경에 따라 @CacheEvict 필요
      */
-    @Operation(summary = "상품 목록 조회 API")
+    @Operation(summary = "상품 목록 조회 API",
+               description = """
+                             상/하위 카테고리, 상품명, 가격 범위로 검색이 가능하며 페이징 정보(기본 사이즈 10)를 포함합니다.
+                             각 상품요소는 Self-Link 정보를 갖고 있습니다.
+                             정렬은 Client에 의존하며, 정렬을 지원하지 않는 필드에 대한 예외처리를 포합합니다.
+                             """
+    )
     @Cacheable("itemPageCache")
     @GetMapping(value = "/api/items")
     public ResponseEntity<PagedModel<EntityModel<ItemResponse>>> getItems(@RequestParam(required = false) Long categoryId,
@@ -48,7 +56,7 @@ public class ItemController {
                                                                           @RequestParam(required = false) String itemName,
                                                                           @RequestParam(required = false) Long minAmount,
                                                                           @RequestParam(required = false) Long maxAmount,
-                                                                          Pageable pageable) {
+                                                                          @PageableDefault(size = 10) final Pageable pageable) {
 
         Page<ItemResponse> itemPage = itemService.getItems(categoryId, detailCategoryId, itemName, minAmount, maxAmount, pageable);
 

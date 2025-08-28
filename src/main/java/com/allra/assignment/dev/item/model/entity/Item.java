@@ -75,6 +75,12 @@ public class Item {
     @Column(name = "num_of_ratings", nullable = false)
     private Long numOfRatings;
 
+    @Column(name = "item_image", nullable = false)
+    private String itemImage;
+
+    @Column(name = "item_image_path", nullable = false)
+    private String itemImagePath;
+
     @Column(name = "created_at")
     private Instant createdAt;
 

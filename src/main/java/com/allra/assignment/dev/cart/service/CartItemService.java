@@ -1,7 +1,10 @@
 package com.allra.assignment.dev.cart.service;
 
+import com.allra.assignment.dev.item.model.dto.ItemAmountDto;
+import com.allra.assignment.dev.cart.model.dto.MyItemDto;
 import com.allra.assignment.dev.cart.model.entity.CartItem;
 import com.allra.assignment.dev.cart.repository.CartItemRepository;
+import com.allra.assignment.dev.item.controller.ItemController;
 import com.allra.assignment.dev.item.model.entity.Item;
 import com.allra.assignment.dev.cart.model.request.CartItemRequest;
 import com.allra.assignment.dev.item.repository.ItemRepository;
@@ -17,6 +20,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Slf4j
 @Service
@@ -87,6 +98,42 @@ public class CartItemService {
         if(item.getStock() < quantity) {
             throw new CartItemException(CartItemErrorResult.NOT_ENOUGH_STOCK);
         }
+
+    }
+
+    /**
+     * 장바구니 조회 로직
+     * 1. 품절 상태
+     * 2. 상위 카테고리로 그룹화
+     * 3. 장바구니에 담을 당시와 현재 상품의 가격 비교
+     */
+    @Transactional(readOnly = true)
+    public Map<Integer, List<MyItemDto>> getCartItems(Long userId) {
+
+        // 장바구니 목록 조회
+        return
+            cartItemRepository.findByUserUserId(userId)
+                .stream()
+                .collect(Collectors.groupingBy(
+                        // 상위 카테고리로 매핑
+                        cartItem -> cartItem.getItem().getCategory().getCategoryId(),
+                        // 해당 카테고리 장바구니 상품 DTO 변환
+                        Collectors.mapping(cartItem -> {
+                            // 상품 정보 DTO 변환
+                            MyItemDto myItemDto = new MyItemDto(cartItem);
+
+                            // 담을 당시 상품 금액
+                            myItemDto.setAmountAtAdded(new ItemAmountDto(cartItem));
+                            // 현재 상품의 가격
+                            myItemDto.setAmountNow(new ItemAmountDto(cartItem.getItem(), cartItem.getQuantity()));
+
+                            // 상품 조회 URI
+                            URI location = linkTo(methodOn(ItemController.class).getItem(cartItem.getItem().getItemId())).toUri();
+                            myItemDto.setItemLocation(location);
+
+                            return myItemDto;
+                        }, Collectors.toList())
+                ));
 
     }
 
