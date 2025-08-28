@@ -1,4 +1,4 @@
-package com.allra.assignment.dev.item.model.dto;
+package com.allra.assignment.dev.item.model.response;
 
 import com.allra.assignment.dev.item.model.entity.Item;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,14 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "상품 DTO")
-public class ItemDto {
+public class ItemResponse {
     @Schema(description = "상품 고유번호")
     private Long id;
 
@@ -52,8 +50,8 @@ public class ItemDto {
     private Long numOfRatings;
 
 
-    public ItemDto(Item item) {
-        this.id = item.getId();
+    public ItemResponse(Item item) {
+        this.id = item.getItemId();
         this.categoryName = item.getCategory().getCategoryName();
         this.detailCategoryName = item.getDetailCategory().getDetailCategoryName();
         this.itemName = item.getName();

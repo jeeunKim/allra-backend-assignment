@@ -1,12 +1,11 @@
 package com.allra.assignment.dev.item.service;
 
-import com.allra.assignment.dev.exception.ItemErrorResult;
-import com.allra.assignment.dev.exception.custom.ItemException;
-import com.allra.assignment.dev.item.model.dto.ItemDto;
+import com.allra.assignment.exception.result.ItemErrorResult;
+import com.allra.assignment.exception.custom.ItemException;
+import com.allra.assignment.dev.item.model.response.ItemResponse;
 import com.allra.assignment.dev.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class ItemService {
      * @throws ItemException 최소금액이 최대금액보다 큰 경우
      */
     @Transactional(readOnly = true)
-    public Page<ItemDto> getItems(Long categoryId, Long detailCategoryId, String itemName, Long minAmount, Long maxAmount, Pageable pageable) {
+    public Page<ItemResponse> getItems(Long categoryId, Long detailCategoryId, String itemName, Long minAmount, Long maxAmount, Pageable pageable) {
 
         // 최소 > 최대일 경우
         if (minAmount != null && maxAmount != null && minAmount > maxAmount) {

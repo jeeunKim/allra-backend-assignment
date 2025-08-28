@@ -25,8 +25,9 @@ import java.util.Map;
         transactionManagerRef = "allraTransactionManager",
         basePackages = {
                 "com.allra.assignment.dev.item.repository",
-                "com.allra.assignment.dev.payment.repository",
-                "com.allra.assignment.dev.order.repository"
+                "com.allra.assignment.dev.order.repository",
+                "com.allra.assignment.dev.user.repository",
+                "com.allra.assignment.dev.cart.repository"
         }
 )
 public class DataSourceConfig {
@@ -45,7 +46,8 @@ public class DataSourceConfig {
 
         return builder.dataSource(dataSource).packages(
             "com.allra.assignment.dev.item.model.entity",
-                            "com.allra.assignment.dev.payment.model.entity",
+                            "com.allra.assignment.dev.cart.model.entity",
+                            "com.allra.assignment.dev.user.model.entity",
                             "com.allra.assignment.dev.order.model.entity"
         ).persistenceUnit("allra").properties(properties).build();
     }

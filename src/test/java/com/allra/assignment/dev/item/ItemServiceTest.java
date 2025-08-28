@@ -1,12 +1,11 @@
 package com.allra.assignment.dev.item;
 
-import com.allra.assignment.dev.exception.ItemErrorResult;
-import com.allra.assignment.dev.exception.custom.ItemException;
-import com.allra.assignment.dev.item.model.dto.ItemDto;
+import com.allra.assignment.exception.result.ItemErrorResult;
+import com.allra.assignment.exception.custom.ItemException;
+import com.allra.assignment.dev.item.model.response.ItemResponse;
 import com.allra.assignment.dev.item.repository.ItemRepository;
 import com.allra.assignment.dev.item.service.ItemService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,37 +32,31 @@ class ItemServiceTest {
     @Mock
     private ItemRepository itemRepository;
 
-    @BeforeAll
-    @DisplayName("ItemServcie Test Start")
-    static void buildSuccess() {
-        log.info("Start");
-    }
-
 
     @Test
     @DisplayName("정렬이 올바르게 된다")
     void sortItemPage() {
         // given
-        ItemDto item1 = ItemDto.builder()
+        ItemResponse item1 = ItemResponse.builder()
                 .discountAmount(2000L)
                 .build();
 
-        ItemDto item2 = ItemDto.builder()
+        ItemResponse item2 = ItemResponse.builder()
                 .discountAmount(1000L)
                 .build();
 
-        Page<ItemDto> page = new PageImpl<>(List.of(item1, item2));
+        Page<ItemResponse> page = new PageImpl<>(List.of(item1, item2));
         Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "discountAmount"));
 
         given(itemRepository.findItems(anyLong(), anyLong(), anyString(), anyLong(), anyLong(), eq(pageable)))
                 .willReturn(page);
 
         // when
-        Page<ItemDto> result =
+        Page<ItemResponse> result =
                 itemService.getItems(1L, 1L, "노트북", 0L, 3000L, pageable);
 
         // then
-        List<ItemDto> content = result.getContent()
+        List<ItemResponse> content = result.getContent()
                 .stream()
                 .toList();
 
@@ -103,7 +96,7 @@ class ItemServiceTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "amount"));
 
         // 테스트용 ItemDto 생성
-        ItemDto item1 = ItemDto.builder()
+        ItemResponse item1 = ItemResponse.builder()
                 .id(100L)
                 .categoryName("전자기기")
                 .detailCategoryName("노트북")
@@ -112,7 +105,7 @@ class ItemServiceTest {
                 .discountAmount(900000L)
                 .build();
 
-        ItemDto item2 = ItemDto.builder()
+        ItemResponse item2 = ItemResponse.builder()
                 .id(101L)
                 .categoryName("전자기기")
                 .detailCategoryName("노트북")
@@ -121,7 +114,7 @@ class ItemServiceTest {
                 .discountAmount(1100000L)
                 .build();
 
-        Page<ItemDto> page = new PageImpl<>(List.of(item2));
+        Page<ItemResponse> page = new PageImpl<>(List.of(item2));
 
         // Repository mock
         given(itemRepository.findItems(
@@ -134,12 +127,12 @@ class ItemServiceTest {
         )).willReturn(page);
 
         // when
-        Page<ItemDto> result = itemService.getItems(categoryId, detailCategoryId, itemName, minAmount, maxAmount, pageable);
+        Page<ItemResponse> result = itemService.getItems(categoryId, detailCategoryId, itemName, minAmount, maxAmount, pageable);
 
         // then
         assertThat(result.getContent()).hasSize(1);
 
-        Optional<ItemDto> firstItem = result.getContent().stream().findFirst();
+        Optional<ItemResponse> firstItem = result.getContent().stream().findFirst();
         assertThat(firstItem.get().getItemName()).isEqualTo("노트북 B");
     }
 

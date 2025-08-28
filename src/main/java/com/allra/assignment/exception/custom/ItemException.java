@@ -1,7 +1,7 @@
-package com.allra.assignment.dev.exception.custom;
+package com.allra.assignment.exception.custom;
 
 
-import com.allra.assignment.dev.exception.ItemErrorResult;
+import com.allra.assignment.exception.result.ItemErrorResult;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
