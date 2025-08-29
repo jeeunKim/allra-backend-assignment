@@ -2,10 +2,15 @@ package com.allra.assignment.dev.item.repository;
 
 import com.allra.assignment.dev.item.model.response.ItemResponse;
 import com.allra.assignment.dev.item.model.entity.Item;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
@@ -19,4 +24,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
         	  and (:maxAmount is null or i.discountAmount <= :maxAmount)
     """)
     Page<ItemResponse> findItems(Long categoryId, Long detailCategoryId, String itemName, Long minAmount, Long maxAmount, Pageable pageable);
+
+
+    // 행 단위 Exclusive Lock
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select i from Item i where i.itemId = :itemId")
+    Optional<Item> findByIdWithPessimisticLock(@Param("itemId") Long itemId);
 }
