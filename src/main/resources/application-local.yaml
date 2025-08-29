@@ -22,3 +22,7 @@ spring:
       properties:
         hibernate:
           dialect: org.hibernate.dialect.MySQL8Dialect
+
+
+payment-url: https://allra.free.beeceptor.com
+payment-end-point: /api/v1/payment

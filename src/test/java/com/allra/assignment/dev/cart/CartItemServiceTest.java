@@ -271,6 +271,147 @@ public class CartItemServiceTest {
         assertThat(dto2.getItemLocation()).isNotNull();
     }
 
+    // 장바구니 수량 조정----------------------------------------------------------
+    @Test
+    @DisplayName("장바구니 아이템 수량 증가")
+    void incrementQuantity() {
+        // given
+        Item item = Item.builder()
+                .itemId(1L)
+                .amount(1000L)
+                .discountAmount(800L)
+                .discountRate(20.0)
+                .stock(5L)
+                .isSoldOut(false)
+                .build();
+
+        CartItem cartItem = CartItem.builder()
+                .cartItemId(1L)
+                .item(item)
+                .quantity(2)
+                .build();
+
+        given(cartItemRepository.findByUserUserIdAndItemItemId(1L, 1L))
+                .willReturn(Optional.of(cartItem));
+
+        // when
+        CartItem result = cartService.modifyQuantity(1L, 1L, true);
+
+        // then
+        assertThat(result.getQuantity()).isEqualTo(3);
+        assertThat(result.getTotalAmount()).isEqualTo(1000 * 3);
+        assertThat(result.getTotalDiscountAmount()).isEqualTo(800 * 3);
+        verify(cartItemRepository).save(cartItem);
+    }
+
+    @Test
+    @DisplayName("장바구니 아이템 수량 감소")
+    void decrementQuantity() {
+        // given
+        Item item = Item.builder()
+                .itemId(1L)
+                .amount(1000L)
+                .discountAmount(800L)
+                .discountRate(20.0)
+                .stock(5L)
+                .isSoldOut(false)
+                .build();
+
+        CartItem cartItem = CartItem.builder()
+                .cartItemId(1L)
+                .item(item)
+                .quantity(2)
+                .build();
+
+        given(cartItemRepository.findByUserUserIdAndItemItemId(1L, 1L))
+                .willReturn(Optional.of(cartItem));
+
+        // when
+        CartItem result = cartService.modifyQuantity(1L, 1L, false);
+
+        // then
+        assertThat(result.getQuantity()).isEqualTo(1);
+        assertThat(result.getTotalAmount()).isEqualTo(1000 * 1);
+        assertThat(result.getTotalDiscountAmount()).isEqualTo(800 * 1);
+        verify(cartItemRepository).save(cartItem);
+    }
+
+    @Test
+    @DisplayName("수량 감소 후 0이 되면 삭제")
+    void decrementQuantityToZero() {
+        // given
+        Item item = Item.builder()
+                .itemId(1L)
+                .amount(1000L)
+                .discountAmount(800L)
+                .discountRate(20.0)
+                .stock(5L)
+                .isSoldOut(false)
+                .build();
+
+        CartItem cartItem = CartItem.builder().cartItemId(1L).item(item).quantity(1).build();
+
+        given(cartItemRepository.findByUserUserIdAndItemItemId(1L, 1L))
+                .willReturn(Optional.of(cartItem));
+
+        // when
+        cartService.modifyQuantity(1L, 1L, false);
+
+        // then
+        verify(cartItemRepository).delete(cartItem);
+    }
+
+
+    @Test
+    @DisplayName("품절 상품 예외")
+    void soldOutItem() {
+        // given
+        Item item = Item.builder()
+                .itemId(1L)
+                .isSoldOut(true)
+                .build();
+
+        CartItem cartItem = CartItem.builder()
+                .cartItemId(1L)
+                .item(item)
+                .quantity(1)
+                .build();
+
+        given(cartItemRepository.findByUserUserIdAndItemItemId(1L, 1L))
+                .willReturn(Optional.of(cartItem));
+
+        // when & then
+        assertThatThrownBy(() -> cartService.modifyQuantity(1L, 1L, true))
+                .isInstanceOf(CartItemException.class)
+                .extracting("errorResult")
+                .isEqualTo(CartItemErrorResult.CANNOT_MODIFY_IS_SOLD_OUT);
+    }
+
+    @Test
+    @DisplayName("재고보다 많은 수량 증가 예외")
+    void exceedStock() {
+        // given
+        Item item = Item.builder()
+                .itemId(1L)
+                .amount(1000L)
+                .discountAmount(800L)
+                .discountRate(20.0)
+                .stock(2L)
+                .isSoldOut(false)
+                .build();
+
+        CartItem cartItem = CartItem.builder().cartItemId(1L).item(item).quantity(2).build();
+
+        given(cartItemRepository.findByUserUserIdAndItemItemId(1L, 1L))
+                .willReturn(Optional.of(cartItem));
+
+        // when & then
+        assertThatThrownBy(() -> cartService.modifyQuantity(1L, 1L, true))
+                .isInstanceOf(CartItemException.class)
+                .extracting("errorResult")
+                .isEqualTo(CartItemErrorResult.CANNOT_MODIFY_NOT_ENOUGH_STOCK);
+    }
+
 
 
 

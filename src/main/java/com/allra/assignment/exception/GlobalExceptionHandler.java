@@ -2,9 +2,11 @@ package com.allra.assignment.exception;
 
 import com.allra.assignment.exception.custom.CartItemException;
 import com.allra.assignment.exception.custom.ItemException;
+import com.allra.assignment.exception.custom.OrderException;
 import com.allra.assignment.exception.custom.UserException;
 import com.allra.assignment.exception.result.CartItemErrorResult;
 import com.allra.assignment.exception.result.ItemErrorResult;
+import com.allra.assignment.exception.result.OrderErrorResult;
 import com.allra.assignment.exception.result.UserErrorResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -62,6 +64,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleCustomUserException(final UserException exception) {
         log.warn("UserException error occured: ", exception);
         return this.makeUserErrorResponseEntity(exception.getErrorResult());
+    }
+
+    // 결제 관련 예외
+    @ExceptionHandler({OrderException.class})
+    public ResponseEntity<ErrorResponse> handleCustomOrderException(final OrderException exception) {
+        log.warn("OderException error occured: ", exception);
+        String message = exception.getDetailMessage() != null
+                ? exception.getErrorResult().getMessage()+ exception.getDetailMessage()
+                : exception.getErrorResult().getMessage();
+
+        return ResponseEntity.status(exception.getErrorResult().getHttpStatus())
+                .body(new ErrorResponse(exception.getErrorResult().name(), message));
     }
 
 
