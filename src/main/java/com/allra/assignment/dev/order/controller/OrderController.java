@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ public class OrderController {
                           """
     )
     @PostMapping(value = "/api/payment")
+    @CacheEvict(value = "itemPageCache", allEntries = true) // 재고 차감에 따른 상품 캐싱 제거
     public ResponseEntity<OrderResponse> createOrder(@RequestBody Long userId) {
 
         return ResponseEntity.ok().body(orderService.createOrder(userId));
