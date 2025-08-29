@@ -43,7 +43,7 @@ public class PaymentClient {
             // 실패 케이스
 //            return restTemplate.postForObject(paymentUrl + paymentEndPoint, "fail", PaymentResponse.class);
         } catch (Exception e) {
-            log.error("{}-{} 결제 실패: {}", order.getUser().getUserId(), order.getOrderId(), e.getMessage());
+            log.error("{}-{} Payment Error Occur: {}", order.getUser().getUserId(), order.getOrderId(), e.getMessage());
             return new PaymentResponse(PaymentStatus.FAILED.name(), null, e.getMessage());
         }
     }
