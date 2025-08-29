@@ -66,6 +66,7 @@ public class OrderService {
      */
     @Transactional
     public OrderResponse createOrder(Long userId) {
+        log.info("{} - Payment Start", userId);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorResult.USER_NOT_FOUND));
 
@@ -109,9 +110,10 @@ public class OrderService {
         PaymentResponse result;
         try {
             // 외부 결제 호출 (트랜잭션 분리)
+            log.info("Mock Payment API start");
             result = paymentClient.payment(order);
+            log.info("Mock Payment API end");
         } catch (Exception e) {
-            log.error("{} - payment Fail: {}", order.getOrderId(), e.getMessage());
             // 결제 API 호출 자체 실패 시 강제로 실패 Response 생성
             result = new PaymentResponse(PaymentStatus.FAILED.name(), null, e.getMessage());
         }
@@ -142,9 +144,11 @@ public class OrderService {
         paymentRepository.save(payment);
 
         if (result.getStatus().equals(PaymentStatus.SUCCESS.name())) {
+            log.info("Payment Success!");
             order.setOrderStatus(OrderStatus.PAYMENT_SUCCESS);
             cartItemRepository.deleteAllByUser(order.getUser());
         } else {
+            log.info("Payment Fail!");
             order.setOrderStatus(OrderStatus.PAYMENT_FAILED);
             // 실패 시 재고 복원 (보상 트랜잭션)
             for (CartItem cartItem : cartItems) {
@@ -153,6 +157,7 @@ public class OrderService {
                 item.setStock(item.getStock() + cartItem.getQuantity());
                 itemRepository.save(item);
             }
+            log.info("Rollback Stock Success");
         }
         orderRepository.save(order);
     }
