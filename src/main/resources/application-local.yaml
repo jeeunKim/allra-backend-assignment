@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+domain: localhost:8080
+
+spring:
+  application:
+    name: assignment
+
+  allra:
+    datasource:
+      hikari:
+        jdbc-url: jdbc:mysql://localhost:3306/allra?useSSL=false&serverTimezone=Asia/Seoul
+        username: root
+        password: kje991229
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+    jpa:
+      hibernate:
+        ddl-auto: validate
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL8Dialect
+
+
+payment-url: https://allra.free.beeceptor.com
+payment-end-point: /api/v1/payment

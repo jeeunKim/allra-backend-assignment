@@ -1,11 +1,108 @@
-김제은
+지원자: **김제은**
+휴대폰: 010-8752-8309
+이메일: wpdms991229@naver.com
+
+API TEST URL: http://{IP}:{PORT}/swagger-ui/index.html
 
 원래 과제 규칙상 각 기능별 Pull Request마다 AI와의 논의 기록을 남겨야 했으나, 결제 API 구현 전까지는 별도로 모아두고 있었습니다.
-대신 이 README에 기능별 개발 과정과 AI와의 논의 내용을 정리하였습니다.
+대신 모아둔 기능별 개발 과정과 AI와의 논의 내용을 README 하단 정리하였습니다.
 <br>부주의로 인한 점 양해 부탁드립니다. 
 <br>감사합니다.
 
 
+
+# 📦 올라 마켓 백엔드 시스템 구축 프로젝트
+
+
+## 📌 프로젝트 개요
+이 프로젝트는 **상품 조회, 장바구니, 주문 및 결제 기능**을 제공하는 시스템입니다.
+
+## ⚙️ 기술 스택
+- **Language & Framework**
+  - Java 17
+  - Spring Boot 3.3.6
+- **Database**
+  - MySQL 8.0.43
+- **ORM**
+  - Spring Data JPA
+- **API 규격**
+  - Swagger-UI
+- **빌드**
+  - Maven
+
+
+## 🛠 주요 기능
+- **상품 목록 조회**
+  - 조건 검색 (카테고리, 가격 범위, 이름 등)
+  - 품절 여부 포함
+  - 페이징 처리
+  - 캐싱 적용 (`@Cacheable`)
+- **장바구니 추가**
+  - 장바구니에 상품 추가(이미 존재 시 수량 변경)
+  - 재고 및 품절 여부 확인 
+- **장바구니 조회**
+  - 장바구니 내에 모든 상품 조회
+  - 카테고리 별 그룹화
+  - 품절 여부 포함
+- **장바구니 수정**
+  - 장바구니의 수량 조정 +, -
+  - 마이너스 시 담은 수량이 0이 될 경우 제거
+ - **장바구니 삭제**
+  - 장바구니내에 특정 상품 제거
+- **주문 결제**
+  - Mock 결제 API 연동
+  - 상품 재고 관리 및 동시성 문제 차단
+  - 트랜잭션 설계 및 비관적 락 적용
+  - 응답 결과에 따른 주문 상태 업데이트 및 재고 복원 또는 장바구니 정리
+  - 주문, 주문 상세, 결제 이력 저장
+  - 상품 목록 조회 캐싱 초기화 (`@CacheEvict`)
+  
+
+## 📑 API 주요 엔드포인트
+### 상품 목록 조회 API
+```http
+GET /api/items?categoryId={categoryId}&detailCategoryId={detailCategoryId}&itemName={itemName}&minAmount={minAmount}&maxAmount={maxAmount}&page=0&size=10
+```
+### 장바구니 추가 API
+```http
+POST /api/cart
+```
+### 장바구니 조회 API
+```http
+GET /api/cart/{userId}
+```
+
+### 장바구니 수정 API
+```http
+PATCH /api/cart/{userId}/{itemId}
+```
+### 장바구니 수정 API
+```http
+DELETE /api/cart/{userId}/{itemId}
+```
+### 주문 결제 API
+```http
+POST /api/payment
+```
+
+## 🚀 프로젝트 클론
+git clone https://github.com/jeeunKim/allra-backend-assignment.git
+
+## 📂 프로젝트 구조
+ 📂src
+ └─  📂main
+    ├─  📂java
+    │   └─  📂com.allra.assignment
+    │        ├─  📂config -- 설정 파일
+    │        ├─  📂dev	   
+    │        ├─  ├─📂cart   -- 장바구니 
+    │        ├─  ├─📂item  -- 상품
+    │        ├─  ├─📂order-- 주문
+    │        ├─  ├─📂user  -- 유저
+    │        └─  📂exception -- 예외 처리
+    └─  📂resources
+    │	├─ application.yaml
+    │	├─ application-local.yaml
 
 
 
