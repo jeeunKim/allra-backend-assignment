@@ -101,9 +101,9 @@ git clone https://github.com/jeeunKim/allra-backend-assignment.git
 │ │ │ │ ├── 📂 user   (유저)
 │ │ │ ├── 📂 exception (예외 처리)
 │ │ │ ├── 📂 swagger  (스웨거 설정)
-    └─  📂resources
-    │	├─ application.yaml
-    │	├─ application-local.yaml
+│ ├── 📂resources
+│ │ │ ├── application.yaml
+│ │ │ ├── application-local.yaml
 
 
 
