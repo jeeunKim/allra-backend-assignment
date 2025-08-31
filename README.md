@@ -1,10 +1,10 @@
 지원자: **김제은**
-휴대폰: 010-8752-8309
-이메일: wpdms991229@naver.com
+<br>휴대폰: 010-8752-8309
+<br>이메일: wpdms991229@naver.com
 
-API TEST URL: http://{IP}:{PORT}/swagger-ui/index.html
+<br>API TEST URL: http://{IP}:{PORT}/swagger-ui/index.html
 
-원래 과제 규칙상 각 기능별 Pull Request마다 AI와의 논의 기록을 남겨야 했으나, 결제 API 구현 전까지는 별도로 모아두고 있었습니다.
+<br>원래 과제 규칙상 각 기능별 Pull Request마다 AI와의 논의 기록을 남겨야 했으나, 결제 API 구현 전까지는 별도로 모아두고 있었습니다.
 대신 모아둔 기능별 개발 과정과 AI와의 논의 내용을 README 하단 정리하였습니다.
 <br>부주의로 인한 점 양해 부탁드립니다. 
 <br>감사합니다.
