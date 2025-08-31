@@ -110,7 +110,7 @@ git clone https://github.com/jeeunKim/allra-backend-assignment.git
 
 
 
-
+# AI 사용 내역
 # 상품 목록 조회 API
 
 ## 해결하려던 문제
