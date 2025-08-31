@@ -89,20 +89,20 @@ POST /api/payment
 git clone https://github.com/jeeunKim/allra-backend-assignment.git
 
 ## 📂 프로젝트 구조
- 📂src
- └─  📂main
-    ├─  📂java
-    │   └─  📂com.allra.assignment
-    │        ├─  📂config(설정 파일)
-    │        ├─  📂dev	   
-    │        ├─  ├─📂cart(장바구니)
-    │        ├─  ├─📂item(상품)
-    │        ├─  ├─📂order(주문)
-    │        ├─  ├─📂user(유저)
-    │        └─  📂exception(예외 처리)
-    └─  📂resources
-    │	├─ application.yaml
-    │	├─ application-local.yaml
+📂 src
+└─ 📂 main
+├─ 📂 java
+│ └─ 📂 com.allra.assignment
+│ ├─ 📂 config (설정 파일)
+│ ├─ 📂 dev
+│ │ ├─ 📂 cart (장바구니)
+│ │ ├─ 📂 item (상품)
+│ │ ├─ 📂 order (주문)
+│ │ └─ 📂 user (유저)
+│ └─ 📂 exception (예외 처리)
+└─ 📂 resources
+├─ application.yaml
+└─ application-local.yaml
 
 
 
