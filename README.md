@@ -93,13 +93,13 @@ git clone https://github.com/jeeunKim/allra-backend-assignment.git
  └─  📂main
     ├─  📂java
     │   └─  📂com.allra.assignment
-    │        ├─  📂config -- 설정 파일
+    │        ├─  📂config(설정 파일)
     │        ├─  📂dev	   
-    │        ├─  ├─📂cart  -- 장바구니 
-    │        ├─  ├─📂item -- 상품
-    │        ├─  ├─📂order-- 주문
-    │        ├─  ├─📂user  -- 유저
-    │        └─  📂exception -- 예외 처리
+    │        ├─  ├─📂cart(장바구니)
+    │        ├─  ├─📂item(상품)
+    │        ├─  ├─📂order(주문)
+    │        ├─  ├─📂user(유저)
+    │        └─  📂exception(예외 처리)
     └─  📂resources
     │	├─ application.yaml
     │	├─ application-local.yaml
