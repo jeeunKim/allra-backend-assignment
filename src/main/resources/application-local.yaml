@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 80
 
 domain: localhost:8080
 
@@ -10,8 +10,8 @@ spring:
   allra:
     datasource:
       hikari:
-        jdbc-url: jdbc:mysql://localhost:3306/allra?useSSL=false&serverTimezone=Asia/Seoul
-        username: root
+        jdbc-url: jdbc:mysql://practice-db.cjeuo4kmu6b2.ap-northeast-2.rds.amazonaws.com:3306/allra?useSSL=false&serverTimezone=Asia/Seoul
+        username: admin
         password: kje991229
         driver-class-name: com.mysql.cj.jdbc.Driver
 
