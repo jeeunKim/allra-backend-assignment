@@ -1,7 +1,7 @@
 server:
   port: 80
 
-domain: localhost:8080
+domain: 3.37.233.117:80
 
 spring:
   application:
