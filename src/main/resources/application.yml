@@ -1,30 +1,5 @@
-
-
-server:
-  port: 80
-
-domain: 3.37.233.117:80
-
 spring:
-  application:
-    name: assignment
-
-  allra:
-    datasource:
-      hikari:
-        jdbc-url: jdbc:mysql://practice-db.cjeuo4kmu6b2.ap-northeast-2.rds.amazonaws.com:3306/allra?useSSL=false&serverTimezone=Asia/Seoul
-        username: admin
-        password: kje991229
-        driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: local
 
 
-    jpa:
-      hibernate:
-        ddl-auto: validate
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.MySQL8Dialect
-
-
-payment-url: https://allra.free.beeceptor.com
-payment-end-point: /api/v1/payment
