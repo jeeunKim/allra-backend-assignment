@@ -70,6 +70,6 @@ public class ItemResponse {
         this.reviewAvgRating = item.getReviewAvgRating();
         this.numOfRatings = item.getNumOfRatings();
         this.itemImage = item.getItemImage();
-        this.itemImagePath = item.getItemImagePath();
+        this.itemImagePath = "item.getItemImagePath()";
     }
 }
