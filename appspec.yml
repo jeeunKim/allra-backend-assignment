@@ -2,8 +2,8 @@ version: 0.0
 os: linux
 
 files:
-  - source: /
-    destination: /home/ubuntu/allra
+  - source: target/
+    destination: /home/ubuntu/allra/target/
     overwrite: yes
 
 permissions:
