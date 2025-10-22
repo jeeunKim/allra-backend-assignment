@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ubuntu/allra/target/{assignment-0.0.1-SNAPSHOT}.jar)
+BUILD_JAR=$(ls /home/ubuntu/allra/target/assignment-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
 echo "> 현재 시간: $(date)" >> /home/ubuntu/allra/deploy.log
@@ -26,3 +26,4 @@ fi
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> /home/ubuntu/allra/deploy.log
 sudo java -jar $DEPLOY_JAR >> /home/ubuntu/allra/deploy.log 2>/home/ubuntu/allra/deploy_err.log &
+echo "> CD Application Start.."    >> /home/ubuntu/allra/deploy.log
