@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ubuntu/allra-backend-assignment/target/{assignment-0.0.1-SNAPSHOT}.jar)
+BUILD_JAR=$(ls /home/ubuntu/allra/target/{assignment-0.0.1-SNAPSHOT}.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
 echo "> 현재 시간: $(date)" >> /home/ubuntu/action/deploy.log
