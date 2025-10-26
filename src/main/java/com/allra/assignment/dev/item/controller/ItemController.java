@@ -63,6 +63,7 @@ public class ItemController {
         PagedResourcesAssembler<ItemResponse> itemPageAssembler =
                 new PagedResourcesAssembler<>(new HateoasPageableHandlerMethodArgumentResolver(), null);
 
+
         return ResponseEntity.ok()
                     .body(itemPageAssembler
                             .toModel(itemPage, itemResponse ->
