@@ -68,7 +68,7 @@ public class CartItemController {
     @GetMapping(value = "/api/cart/{userId}")
     public ResponseEntity<Map<Integer, List<MyItemDto>>> getCartItems(@PathVariable Long userId) {
 
-
+        log.info("/api/cart/{} Request", userId);
         return ResponseEntity.ok().body(cartItemService.getCartItems(userId));
     }
 

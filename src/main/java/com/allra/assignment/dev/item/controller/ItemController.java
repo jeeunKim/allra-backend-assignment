@@ -63,7 +63,7 @@ public class ItemController {
         PagedResourcesAssembler<ItemResponse> itemPageAssembler =
                 new PagedResourcesAssembler<>(new HateoasPageableHandlerMethodArgumentResolver(), null);
 
-
+        log.info("/api/items Request");
         return ResponseEntity.ok()
                     .body(itemPageAssembler
                             .toModel(itemPage, itemResponse ->
@@ -81,6 +81,7 @@ public class ItemController {
     @GetMapping(value = "/api/item/{itemId}")
     public ResponseEntity<String> getItem(@PathVariable Long itemId) {
 
+        log.info("/api/item/{} Request", itemId);
         return ResponseEntity.ok().body("TEMP");
     }
 }
